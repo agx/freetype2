@@ -1574,7 +1574,7 @@
       {
         FT_TRACE2(( "             too long fragment length makes"
                     " pfb_len confused: temp=0x%08x\n", temp ));
-        error = FT_THROW( Invalid_Offset );
+        error = FT_Err_Invalid_Offset;
         goto Exit;
       }
 
@@ -1587,7 +1587,7 @@
     if ( pfb_len + 2 < 6 ) {
       FT_TRACE2(( "             too long fragment length makes"
                   " pfb_len confused: pfb_len=0x%08x\n", pfb_len ));
-      error = FT_THROW( Array_Too_Large );
+      error = FT_Err_Array_Too_Large;
       goto Exit;
     }
     if ( FT_ALLOC( pfb_data, (FT_Long)pfb_len + 2 ) )
@@ -1617,7 +1617,7 @@
        */
       if ( 0x7FFFFFFFUL < rlen )
       {
-        error = FT_THROW( Invalid_Offset );
+        error = FT_Err_Invalid_Offset;
         goto Exit2;
       }
 
@@ -1626,7 +1626,7 @@
       FT_TRACE3(( "POST fragment[%d]: offsets=0x%08x, rlen=0x%08x, flags=0x%04x\n",
                    i, offsets[i], rlen, flags ));
 
-      error = FT_ERR( Array_Too_Large );
+      error = FT_Err_Array_Too_Large;
       /* postpone the check of rlen longer than buffer until FT_Stream_Read() */
       if ( ( flags >> 8 ) == 0 )        /* Comment, should not be loaded */
       {
@@ -1685,7 +1685,7 @@
       pfb_pos += rlen;
     }
 
-    error = FT_ERR( Array_Too_Large );
+    error = FT_Err_Array_Too_Large;
     if ( pfb_pos + 2 > pfb_len + 2 )
       goto Exit2;
     pfb_data[pfb_pos++] = 0x80;
@@ -1706,13 +1706,13 @@
                                   aface );
 
   Exit2:
-    if ( error == FT_ERR( Array_Too_Large ) )
+    if ( error == FT_Err_Array_Too_Large )
       FT_TRACE2(( "  Abort due to too-short buffer to store"
                   " all POST fragments\n" ));
-    else if ( error == FT_ERR( Invalid_Offset ) )
+    else if ( error == FT_Err_Invalid_Offset )
       FT_TRACE2(( "  Abort due to invalid offset in a POST fragment\n" ));
     if ( error )
-      error = FT_ERR( Cannot_Open_Resource );
+      error = FT_Err_Cannot_Open_Resource;
     FT_FREE( pfb_data );
 
   Exit:
